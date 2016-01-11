@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         // likewise for the camera object itself.
         parameters.setPreviewSize(profile.videoFrameWidth, profile.videoFrameHeight);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_INFINITY);
         mCamera.setParameters(parameters);
         try {
             mCamera.setPreviewTexture(mPreview.getSurfaceTexture());
