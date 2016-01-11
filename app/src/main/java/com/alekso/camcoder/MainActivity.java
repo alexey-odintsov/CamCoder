@@ -7,18 +7,20 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.TextureView;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TextureView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
     FloatingActionButton captureButton;
+    private TextView mTimeLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mPreview = (TextureView) findViewById(R.id.surface_view);
-
         captureButton = (FloatingActionButton) findViewById(R.id.fab);
-//        captureButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-
+        mTimeLog = (TextView) findViewById(R.id.tvTimeLog);
     }
 
     @Override
@@ -80,28 +74,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void onCaptureClick(View view) {
         if (isRecording) {
-            // BEGIN_INCLUDE(stop_release_media_recorder)
-
-            // stop recording and release camera
-            mMediaRecorder.stop();  // stop the recording
-            releaseMediaRecorder(); // release the MediaRecorder object
-            mCamera.lock();         // take camera access back from MediaRecorder
-
-            // inform the user that recording has stopped
-            setCaptureButtonText(ACTION.CAPTURE);
-            isRecording = false;
-            releaseCamera();
-            // END_INCLUDE(stop_release_media_recorder)
-
+            doStopRecord();
         } else {
-
-            // BEGIN_INCLUDE(prepare_start_media_recorder)
-
-            new MediaPrepareTask().execute(null, null, null);
-
-            // END_INCLUDE(prepare_start_media_recorder)
-
+            doRecord();
         }
+    }
+
+    private void doRecord() {
+        // BEGIN_INCLUDE(prepare_start_media_recorder)
+        new MediaPrepareTask().execute(null, null, null);
+        // END_INCLUDE(prepare_start_media_recorder)
+    }
+
+    private void doStopRecord() {
+        // BEGIN_INCLUDE(stop_release_media_recorder)
+        // stop recording and release camera
+        mMediaRecorder.stop();  // stop the recording
+        releaseMediaRecorder(); // release the MediaRecorder object
+        mCamera.lock();         // take camera access back from MediaRecorder
+
+        // inform the user that recording has stopped
+        setCaptureButtonText(ACTION.CAPTURE);
+        isRecording = false;
+        releaseCamera();
+        // END_INCLUDE(stop_release_media_recorder)
     }
 
     enum ACTION {
@@ -113,9 +109,22 @@ public class MainActivity extends AppCompatActivity {
         switch (action) {
             case STOP:
                 captureButton.setImageResource(R.drawable.stop);
+                new CountDownTimer(60 * 1000, 1000) {
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        mTimeLog.setText(millisUntilFinished + "");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        mTimeLog.setText("finish");
+                    }
+                }.start();
                 break;
             case CAPTURE:
                 captureButton.setImageResource(R.drawable.play);
+
                 break;
             default:
                 captureButton.setImageResource(R.drawable.play);
@@ -134,20 +143,33 @@ public class MainActivity extends AppCompatActivity {
         // dimensions of our preview surface.
         Camera.Parameters parameters = mCamera.getParameters();
         List<Camera.Size> mSupportedPreviewSizes = parameters.getSupportedPreviewSizes();
-        Camera.Size optimalSize = CameraHelper.getOptimalPreviewSize(mSupportedPreviewSizes,
-                mPreview.getWidth(), mPreview.getHeight());
 
+        Camera.Size maxSize = mSupportedPreviewSizes.get(0);
+        for (Camera.Size size : mSupportedPreviewSizes) {
+            Log.d(TAG, "sizes: " + size.width + "x" + size.height);
+            if (maxSize.width < size.width) {
+                maxSize = size;
+            }
+        }
+        Camera.Size optimalSize = CameraHelper.getOptimalPreviewSize(mSupportedPreviewSizes, mPreview.getWidth(), mPreview.getHeight());
+
+
+        Log.d(TAG, "optimal size: " + optimalSize.width + "x" + optimalSize.height);
+        Log.d(TAG, "max size: " + maxSize.width + "x" + maxSize.height);
         // Use the same size for recording profile.
         CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-        profile.videoFrameWidth = optimalSize.width;
-        profile.videoFrameHeight = optimalSize.height;
+        profile.videoFrameWidth = maxSize.width;
+        profile.videoFrameHeight = maxSize.height;
+
+        Log.d(TAG, "Profile: audio channels: " + profile.audioChannels);
+        Log.d(TAG, "Profile: audio bit rate: " + profile.audioBitRate);
+        Log.d(TAG, "Profile: audio sample rate: " + profile.audioSampleRate);
+        Log.d(TAG, "Profile: audio codec: " + profile.audioCodec);
 
         // likewise for the camera object itself.
         parameters.setPreviewSize(profile.videoFrameWidth, profile.videoFrameHeight);
         mCamera.setParameters(parameters);
         try {
-            // Requires API level 11+, For backward compatibility use {@link setPreviewDisplay}
-            // with {@link SurfaceView}
             mCamera.setPreviewTexture(mPreview.getSurfaceTexture());
         } catch (IOException e) {
             Log.e(TAG, "Surface texture is unavailable or unsuitable" + e.getMessage());
@@ -173,6 +195,29 @@ public class MainActivity extends AppCompatActivity {
         // Step 4: Set output file
         mMediaRecorder.setOutputFile(CameraHelper.getOutputMediaFile(CameraHelper.MEDIA_TYPE_VIDEO).toString());
         // END_INCLUDE (configure_media_recorder)
+
+        mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra) {
+                Log.d(TAG, "MR INFO: " + what + "; extra: " + extra);
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    // restartVideo()
+                    Log.d(TAG, "Max duration reached");
+                } else if (what == 1000 /*MediaRecorder.MEDIA_RECORDER_TRACK_INFO_COMPLETION_STATUS*/) {
+                    Log.d(TAG, "Restart video recording");
+                    doStopRecord();
+
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+                        public void run() {
+                            doRecord();
+                        }
+                    }, 500);
+
+                }
+            }
+        });
+        mMediaRecorder.setMaxDuration(60 * 1000);
 
         // Step 5: Prepare configured MediaRecorder
         try {
