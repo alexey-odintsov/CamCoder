@@ -24,12 +24,14 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final int CHUNK_SIZE = 3 * 60 * 1000; // 60 sec
+
     private static final String TAG = "CamCoder";
     private Camera mCamera;
     private TextureView mPreview;
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
-    FloatingActionButton captureButton;
+    private FloatingActionButton mCaptureButton;
     private TextView mTimeLog;
     private CountDownTimer mTimer;
 
@@ -39,8 +41,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mPreview = (TextureView) findViewById(R.id.surface_view);
-        captureButton = (FloatingActionButton) findViewById(R.id.fab);
         mTimeLog = (TextView) findViewById(R.id.tvTimeLog);
+        mCaptureButton = (FloatingActionButton) findViewById(R.id.fab);
+
+        mCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isRecording) {
+                    doStopRecord();
+                } else {
+                    doRecord();
+                }
+            }
+        });
     }
 
     @Override
@@ -70,14 +83,6 @@ public class MainActivity extends AppCompatActivity {
             // release the camera for other applications
             mCamera.release();
             mCamera = null;
-        }
-    }
-
-    public void onCaptureClick(View view) {
-        if (isRecording) {
-            doStopRecord();
-        } else {
-            doRecord();
         }
     }
 
@@ -113,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
     private void setCaptureButtonText(ACTION action) {
         switch (action) {
             case STOP:
-                captureButton.setImageResource(R.drawable.stop);
-                mTimer = new CountDownTimer(60 * 1000, 1000) {
+                mCaptureButton.setImageResource(R.drawable.stop);
+                mTimer = new CountDownTimer(CHUNK_SIZE, 1000) {
 
                     private int c = 0;
 
@@ -131,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
                 }.start();
                 break;
             case CAPTURE:
-                captureButton.setImageResource(R.drawable.play);
+                mCaptureButton.setImageResource(R.drawable.play);
 
                 break;
             default:
-                captureButton.setImageResource(R.drawable.play);
+                mCaptureButton.setImageResource(R.drawable.play);
                 break;
         }
     }
@@ -225,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        mMediaRecorder.setMaxDuration(60 * 1000);
+        mMediaRecorder.setMaxDuration(CHUNK_SIZE);
 
         // Step 5: Prepare configured MediaRecorder
         try {

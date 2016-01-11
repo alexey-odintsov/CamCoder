@@ -19,16 +19,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
-        android:onClick="onCaptureClick"
         android:src="@drawable/play" />
 
     <TextView
+        android:id="@+id/tvTimeLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/tvTimeLog"
         android:layout_gravity="left|top"
+        android:text="00:00"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#ffffff" />
 
 </FrameLayout>
