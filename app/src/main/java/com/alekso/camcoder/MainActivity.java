@@ -1,6 +1,7 @@
 package com.alekso.camcoder;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextureView mPreview;
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
-    private FloatingActionButton mCaptureButton;
+    private ImageButton mCaptureButton;
     private TextView mTimeLog;
     private CountDownTimer mTimer;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPreview = (TextureView) findViewById(R.id.surface_view);
         mTimeLog = (TextView) findViewById(R.id.tvTimeLog);
-        mCaptureButton = (FloatingActionButton) findViewById(R.id.fab);
+        mCaptureButton = (ImageButton) findViewById(R.id.fab);
 
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
