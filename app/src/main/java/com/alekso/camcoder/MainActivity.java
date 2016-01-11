@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onTick(long millisUntilFinished) {
                         c++;
-                        mTimeLog.setText(c + "");
+                        mTimeLog.setText(String.format("%02d:%02d", c / 60, c % 60));
                     }
 
                     @Override
