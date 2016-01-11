@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isRecording = false;
     FloatingActionButton captureButton;
     private TextView mTimeLog;
+    private CountDownTimer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doStopRecord() {
+        if (mTimer != null) {
+            mTimer.cancel();
+        }
+
         // BEGIN_INCLUDE(stop_release_media_recorder)
         // stop recording and release camera
         mMediaRecorder.stop();  // stop the recording
@@ -109,11 +114,14 @@ public class MainActivity extends AppCompatActivity {
         switch (action) {
             case STOP:
                 captureButton.setImageResource(R.drawable.stop);
-                new CountDownTimer(60 * 1000, 1000) {
+                mTimer = new CountDownTimer(60 * 1000, 1000) {
+
+                    private int c = 0;
 
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        mTimeLog.setText(millisUntilFinished + "");
+                        c++;
+                        mTimeLog.setText(c + "");
                     }
 
                     @Override
