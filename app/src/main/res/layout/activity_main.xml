@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:keepScreenOn="true"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -26,11 +27,11 @@
         android:id="@+id/tvTimeLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|top"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_gravity="right|bottom"
         android:text="00:00"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp" />
 
 </FrameLayout>
