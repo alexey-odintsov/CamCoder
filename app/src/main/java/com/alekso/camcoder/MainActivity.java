@@ -61,10 +61,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        // if we are using MediaRecorder, release it first
-        releaseMediaRecorder();
-        // release the camera immediately on pause event
-        releaseCamera();
+        doStopRecord();
     }
 
     private void releaseMediaRecorder() {
@@ -101,9 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
         // BEGIN_INCLUDE(stop_release_media_recorder)
         // stop recording and release camera
-        mMediaRecorder.stop();  // stop the recording
+        if (mMediaRecorder != null) {
+            mMediaRecorder.stop();  // stop the recording
+        }
         releaseMediaRecorder(); // release the MediaRecorder object
-        mCamera.lock();         // take camera access back from MediaRecorder
+        if (mCamera != null) {
+            mCamera.lock();         // take camera access back from MediaRecorder
+        }
 
         // inform the user that recording has stopped
         setCaptureButtonText(ACTION.CAPTURE);
