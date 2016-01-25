@@ -8,7 +8,7 @@
         android:id="@+id/headingLayouts"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Video settings"
+        android:text="@string/settings_video_settings"
 
         android:theme="@style/Heading" />
 
@@ -28,23 +28,23 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save path"
+                android:text="@string/settings_save_video_path"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tv_save_video_path_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Not selected"
+                android:text="@string/settings_not_selected"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_save_video_path_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Change" />
+            android:text="@string/settings_change" />
     </LinearLayout>
 
     <LinearLayout
@@ -63,23 +63,23 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Video quality"
+                android:text="@string/settings_video_quality"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
-                android:id="@+id/textView22"
+                android:id="@+id/tv_video_quality_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Not selected"
+                android:text="@string/settings_not_selected"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
         </LinearLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_video_quality_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Change" />
+            android:text="@string/settings_change" />
     </LinearLayout>
 
 </LinearLayout>

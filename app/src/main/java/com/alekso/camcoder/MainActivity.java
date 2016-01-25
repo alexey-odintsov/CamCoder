@@ -73,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
         doStopRecord();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ((App) getApplication()).loadSettings();
+    }
+
     private void releaseMediaRecorder() {
         if (mMediaRecorder != null) {
             // clear recorder configuration
