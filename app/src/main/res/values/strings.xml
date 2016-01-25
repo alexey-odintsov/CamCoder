@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">CamCoder</string>
     <string name="action_settings">Settings</string>
-    <string name="settings_video_quality">Video quality</string>
+    <string name="settings_video_resolution">Video resolution</string>
     <string name="settings_not_selected">Not selected</string>
     <string name="settings_change">Change</string>
     <string name="settings_save_video_path">Save path</string>

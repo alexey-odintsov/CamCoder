@@ -1,12 +1,10 @@
 package com.alekso.camcoder;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.StatFs;
@@ -25,6 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    private App mApp = (App) getApplication();
 
     public final int CHUNK_SIZE = 3 * 60 * 1000; // 60 sec
 
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        ((App) getApplication()).loadSettings();
+        mApp.loadSettings();
     }
 
     private void releaseMediaRecorder() {
@@ -168,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private boolean prepareVideoRecorder() {
 
         // BEGIN_INCLUDE (configure_preview)
