@@ -17,4 +17,16 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Heading" parent="AppTheme">
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/heading</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="SettingsItemContainer">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
 </resources>

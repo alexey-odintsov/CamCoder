@@ -34,4 +34,17 @@
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp" />
 
+    <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right|top"
+        android:adjustViewBounds="false"
+        android:background="#00ffffff"
+        android:contentDescription="Settings"
+        android:scaleType="fitCenter"
+        android:src="@drawable/settings"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp" />
+
 </FrameLayout>

@@ -1,7 +1,7 @@
 package com.alekso.camcoder;
 
 import android.annotation.TargetApi;
-import android.graphics.Color;
+import android.content.Intent;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.FloatingActionButton;
+import android.os.StatFs;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private MediaRecorder mMediaRecorder;
     private boolean isRecording = false;
     private ImageButton mCaptureButton;
+    private ImageButton mButtonSettings;
     private TextView mTimeLog;
     private CountDownTimer mTimer;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         mPreview = (TextureView) findViewById(R.id.surface_view);
         mTimeLog = (TextView) findViewById(R.id.tvTimeLog);
         mCaptureButton = (ImageButton) findViewById(R.id.fab);
+        mButtonSettings = (ImageButton) findViewById(R.id.btnSettings);
 
         mCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     doRecord();
                 }
+            }
+        });
+
+        mButtonSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             }
         });
     }
@@ -86,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doRecord() {
+        // @todo: check free space and delete old files if it necessary
+        StatFs stat = new StatFs("/storage/external_SD");
+        long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
+        Log.d(TAG, "Free space: " + bytesAvailable / (1024.f * 1024.f));
         // BEGIN_INCLUDE(prepare_start_media_recorder)
         new MediaPrepareTask().execute(null, null, null);
         // END_INCLUDE(prepare_start_media_recorder)
@@ -301,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

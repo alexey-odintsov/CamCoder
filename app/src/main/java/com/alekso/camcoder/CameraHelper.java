@@ -204,9 +204,9 @@ public class CameraHelper {
         for (String dir : getExternalMounts()) {
             Log.d("CAM", dir);
             File f = new File(dir);
-            for (String i : f.list()) {
-                Log.d("CAM", "- " + i);
-            }
+//            for (String i : f.list()) {
+//                Log.d("CAM", "- " + i);
+//            }
             // @todo hardcoded - should be universal
             if ("/storage/external_SD".equals(dir)) {
                 mediaStorageDir = f;
