@@ -6,4 +6,5 @@
     <string name="settings_change">Change</string>
     <string name="settings_save_video_path">Save path</string>
     <string name="settings_video_settings">Video settings</string>
+    <string name="cancel">Cancel</string>
 </resources>

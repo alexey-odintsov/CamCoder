@@ -14,8 +14,8 @@ public class App extends Application {
     private static final String SETTINGS_SAVE_VIDEO_PATH = "save_video_path";
     private static final String SETTINGS_VIDEO_RESOLUTION = "video_resolution";
 
-    String saveVideoPath = DEFAULT_SAVE_VIDEO_PATH;
-    String videoResolution = DEFAULT_VIDEO_RESOLUTION;
+    public String saveVideoPath = DEFAULT_SAVE_VIDEO_PATH;
+    public String videoResolution = DEFAULT_VIDEO_RESOLUTION;
 
     /**
      * Load app settings

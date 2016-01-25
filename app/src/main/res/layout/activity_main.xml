@@ -9,7 +9,8 @@
     <TextureView
         android:id="@+id/surface_view"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary" />
 
     <ImageButton
         android:id="@+id/fab"
@@ -28,23 +29,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         android:text="00:00"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp" />
+        android:textColor="#ffffff" />
 
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right|top"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
         android:adjustViewBounds="false"
         android:background="#00ffffff"
         android:contentDescription="Settings"
         android:scaleType="fitCenter"
-        android:src="@drawable/settings"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp" />
+        android:src="@drawable/settings" />
 
 </FrameLayout>

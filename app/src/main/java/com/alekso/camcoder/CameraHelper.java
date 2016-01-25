@@ -16,9 +16,7 @@
 
 package com.alekso.camcoder;
 
-import android.annotation.TargetApi;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -120,7 +118,6 @@ public class CameraHelper {
      *                 or Camera.CameraInfo.CAMERA_FACING_BACK.
      * @return the default camera on the device. Returns null if camera is not available.
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private static Camera getDefaultCamera(int position) {
         // Find the total number of cameras available
         int mNumberOfCameras = Camera.getNumberOfCameras();

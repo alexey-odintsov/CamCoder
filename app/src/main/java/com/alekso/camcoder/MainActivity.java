@@ -1,6 +1,7 @@
 package com.alekso.camcoder;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
@@ -23,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private App mApp = (App) getApplication();
+    private App mApp;
 
     public final int CHUNK_SIZE = 3 * 60 * 1000; // 60 sec
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mApp = (App) getApplication();
 
         mPreview = (TextureView) findViewById(R.id.surface_view);
         mTimeLog = (TextView) findViewById(R.id.tvTimeLog);
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         doStopRecord();
+
     }
 
     @Override
@@ -189,11 +192,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         Log.d(TAG, "optimal size: " + optimalSize.width + "x" + optimalSize.height);
-        Log.d(TAG, "max size: " + maxSize.width + "x" + maxSize.height);
-        // Use the same size for recording profile.
+        Log.d(TAG, "Settings size: " + mApp.videoResolution);
+        String size[] = mApp.videoResolution.split("x");
+        // Use the Settings size for recording profile.
         CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-        profile.videoFrameWidth = maxSize.width;
-        profile.videoFrameHeight = maxSize.height;
+        profile.videoFrameWidth = Integer.valueOf(size[0]);
+        profile.videoFrameHeight = Integer.valueOf(size[1]);
 
         Log.d(TAG, "Profile: audio channels: " + profile.audioChannels);
         Log.d(TAG, "Profile: audio bit rate: " + profile.audioBitRate);
