@@ -18,12 +18,15 @@ package com.alekso.camcoder;
 
 import android.hardware.Camera;
 import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 import java.io.File;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,6 +38,7 @@ public class CameraHelper {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
+    private static final String TAG = "CameraHelper";
 
     /**
      * Iterate over supported camera preview sizes to see which one best fits the
@@ -198,12 +202,12 @@ public class CameraHelper {
 
         // Log.d("CAM", Environment.getExternalStorageDirectory().getAbsolutePath());
         // Log.d("CAM", Environment.getExternalStoragePublicDirectory(Environment.MEDIA_MOUNTED).getAbsolutePath());
+
+
         for (String dir : getExternalMounts()) {
             Log.d("CAM", dir);
             File f = new File(dir);
-//            for (String i : f.list()) {
-//                Log.d("CAM", "- " + i);
-//            }
+
             // @todo hardcoded - should be universal
             if ("/storage/external_SD".equals(dir)) {
                 mediaStorageDir = f;
@@ -218,6 +222,25 @@ public class CameraHelper {
                 return null;
             }
         }
+
+        // Check free size
+        StatFs stat = new StatFs(mediaStorageDir.getPath());
+        long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
+        Log.d(TAG, "Free space2: " + bytesAvailable / (1024.f * 1024.f));
+
+        if (bytesAvailable < 500 * 1024 * 1024) { // 400Mb
+            File f = new File(mediaStorageDir.getPath());
+            List<String> files = Arrays.asList(f.list());
+            Collections.sort(files);
+
+            for (String i : files) {
+                Log.d("FILE", "- " + i);
+            }
+            File fileToDelete = new File(mediaStorageDir.getPath(), files.get(0));
+            boolean isDeleted = fileToDelete.delete();
+            Log.d(TAG, "deleting " + fileToDelete.toString() + ": " + isDeleted);
+        }
+
 
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

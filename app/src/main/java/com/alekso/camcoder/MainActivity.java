@@ -104,10 +104,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void doRecord() {
-        // @todo: check free space and delete old files if it necessary
-        StatFs stat = new StatFs("/storage/external_SD");
-        long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
-        Log.d(TAG, "Free space: " + bytesAvailable / (1024.f * 1024.f));
+        Log.d(TAG, "start recording task");
         // BEGIN_INCLUDE(prepare_start_media_recorder)
         new MediaPrepareTask().execute(null, null, null);
         // END_INCLUDE(prepare_start_media_recorder)
@@ -171,10 +168,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean prepareVideoRecorder() {
-
+        Log.d(TAG, "prepareVideoRecorder started");
         // BEGIN_INCLUDE (configure_preview)
         mCamera = CameraHelper.getDefaultCameraInstance();
 
+        Log.d(TAG, "found camera: " + mCamera);
         // We need to make sure that our preview and recording video size are supported by the
         // camera. Query camera to find all the sizes and choose the optimal size given the
         // dimensions of our preview surface.
@@ -183,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         Camera.Size maxSize = mSupportedPreviewSizes.get(0);
         for (Camera.Size size : mSupportedPreviewSizes) {
-            Log.d(TAG, "sizes: " + size.width + "x" + size.height);
+            //Log.d(TAG, "sizes: " + size.width + "x" + size.height);
             if (maxSize.width < size.width) {
                 maxSize = size;
             }
@@ -199,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
         profile.videoFrameWidth = Integer.valueOf(size[0]);
         profile.videoFrameHeight = Integer.valueOf(size[1]);
 
-        Log.d(TAG, "Profile: audio channels: " + profile.audioChannels);
-        Log.d(TAG, "Profile: audio bit rate: " + profile.audioBitRate);
-        Log.d(TAG, "Profile: audio sample rate: " + profile.audioSampleRate);
-        Log.d(TAG, "Profile: audio codec: " + profile.audioCodec);
+        //Log.d(TAG, "Profile: audio channels: " + profile.audioChannels);
+        //Log.d(TAG, "Profile: audio bit rate: " + profile.audioBitRate);
+        //Log.d(TAG, "Profile: audio sample rate: " + profile.audioSampleRate);
+        //Log.d(TAG, "Profile: audio codec: " + profile.audioCodec);
 
         // likewise for the camera object itself.
         parameters.setPreviewSize(profile.videoFrameWidth, profile.videoFrameHeight);
@@ -270,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             releaseMediaRecorder();
             return false;
         }
+        Log.d(TAG, "prepareVideoRecorder finished");
         return true;
     }
 
@@ -285,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
             if (prepareVideoRecorder()) {
                 // Camera is available and unlocked, MediaRecorder is prepared,
                 // now you can start recording
+                Log.d(TAG, "mediaRecorder.start");
                 mMediaRecorder.start();
-
                 isRecording = true;
             } else {
                 // prepare didn't work, release the camera
