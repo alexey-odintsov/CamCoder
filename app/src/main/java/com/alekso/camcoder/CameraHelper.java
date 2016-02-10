@@ -223,13 +223,23 @@ public class CameraHelper {
             }
         }
 
-        // Check free size
-        StatFs stat = new StatFs(mediaStorageDir.getPath());
-        long bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
-        Log.d(TAG, "Free space2: " + bytesAvailable / (1024.f * 1024.f));
+        long bytesAvailable = 0;
 
-        if (bytesAvailable < 500 * 1024 * 1024) { // 400Mb
+        long MIN_SPACE = 500 * 1024 * 1024;// 500Mb
+
+        int deleteCount = 0;
+        while (bytesAvailable < MIN_SPACE) {
+            StatFs stat = new StatFs(mediaStorageDir.getPath());
+            bytesAvailable = (long) stat.getBlockSize() * (long) stat.getAvailableBlocks();
+            Log.d(TAG, "Free space # " + deleteCount + " : " + bytesAvailable / (1024.f * 1024.f));
+
+            if (bytesAvailable >= MIN_SPACE) {
+                break;
+            }
+
+            deleteCount++;
             File f = new File(mediaStorageDir.getPath());
+            // @todo check for empty directory
             List<String> files = Arrays.asList(f.list());
             Collections.sort(files);
 
@@ -239,8 +249,8 @@ public class CameraHelper {
             File fileToDelete = new File(mediaStorageDir.getPath(), files.get(0));
             boolean isDeleted = fileToDelete.delete();
             Log.d(TAG, "deleting " + fileToDelete.toString() + ": " + isDeleted);
+            if (deleteCount > 20) break; // prevent from infinite loop
         }
-
 
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

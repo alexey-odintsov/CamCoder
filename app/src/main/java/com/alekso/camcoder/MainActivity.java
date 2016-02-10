@@ -1,14 +1,12 @@
 package com.alekso.camcoder;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.StatFs;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
