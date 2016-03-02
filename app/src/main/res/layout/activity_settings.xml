@@ -9,7 +9,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/settings_video_settings"
-
         android:theme="@style/Heading" />
 
     <LinearLayout
@@ -82,4 +81,24 @@
             android:text="@string/settings_change" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Camera info"
+        android:theme="@style/Heading" />
+
+    <LinearLayout
+        style="@style/SettingsItemContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btnGetCamInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Get Info" />
+
+    </LinearLayout>
 </LinearLayout>
