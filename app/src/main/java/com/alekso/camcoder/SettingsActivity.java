@@ -72,9 +72,11 @@ public class SettingsActivity extends AppCompatActivity {
                             if (param != null) {
                                 String[] paramKV = param.split("=");
                                 sb.append("<b>").append(paramKV[0]).append("</b><br>");
-                                String[] paramsValues = paramKV[1].split(",");
-                                for (String value : paramsValues) {
-                                    sb.append(" - ").append(value).append("<br>");
+                                if (paramKV.length > 1 && paramKV[1] != null) {
+                                    String[] paramsValues = paramKV[1].split(",");
+                                    for (String value : paramsValues) {
+                                        sb.append(" - ").append(value).append("<br>");
+                                    }
                                 }
                             }
                         }
