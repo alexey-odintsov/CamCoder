@@ -25,6 +25,17 @@ public class VideoResolutionDialog extends AppCompatDialog {
     private static final String TAG = "VideoResolutionDialog";
     private Button mButtonCancel;
     private ListView mListView;
+    private String selectedValue;
+    private VideoResolutionChangeListener veVideoResolutionChangeListener;
+
+    public void setVideoResolutionChangeListener(VideoResolutionChangeListener veVideoResolutionChangeListener) {
+        this.veVideoResolutionChangeListener = veVideoResolutionChangeListener;
+    }
+
+    public interface VideoResolutionChangeListener {
+        void onVideoResolutionSelected(String selectedValue);
+    }
+
 
     public VideoResolutionDialog(Context context) {
         super(context);
@@ -45,6 +56,7 @@ public class VideoResolutionDialog extends AppCompatDialog {
         final List<String> resolutions = new ArrayList<>();
         Camera camera = CameraHelper.getDefaultCameraInstance();
         List<Camera.Size> sizes = camera.getParameters().getSupportedVideoSizes();
+        camera.release();
         Collections.sort(sizes, new Comparator<Camera.Size>() {
             @Override
             public int compare(Camera.Size a, Camera.Size b) {
@@ -60,14 +72,16 @@ public class VideoResolutionDialog extends AppCompatDialog {
             resolutions.add(String.format("%dx%d", size.width, size.height));
             Log.d(TAG, String.format("%dx%d", size.width, size.height));
         }
-        mListView.setAdapter(new ArrayAdapter<String>(getContext(),
+        mListView.setAdapter(new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1,
                 resolutions));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((App) getContext().getApplicationContext()).videoResolution = resolutions.get(position);
-                Log.d(TAG, "Resolution selected: " + ((App) getContext().getApplicationContext()).videoResolution);
+                selectedValue = resolutions.get(position);
+                ((App) getContext().getApplicationContext()).videoResolution = selectedValue;
+                Log.d(TAG, "Resolution selected: " + selectedValue);
+                veVideoResolutionChangeListener.onVideoResolutionSelected(selectedValue);
                 dismiss();
             }
         });
