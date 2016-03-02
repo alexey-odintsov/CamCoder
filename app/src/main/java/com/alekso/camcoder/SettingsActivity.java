@@ -18,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button mBtnSelectVideoResolution;
     private Button mBtnGetCamInfo;
     private TextView mTextViewVideoResolutionValue;
+    private TextView mTextViewVideoPathValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,8 @@ public class SettingsActivity extends AppCompatActivity {
         mTextViewVideoResolutionValue = (TextView) findViewById(R.id.tv_video_resolution_value);
         mTextViewVideoResolutionValue.setText(App.videoResolution);
 
+        mTextViewVideoPathValue = (TextView) findViewById(R.id.tv_save_video_path_value);
+        mTextViewVideoPathValue.setText(App.saveVideoPath);
 
         mBtnGetCamInfo = (Button) findViewById(R.id.btnGetCamInfo);
         mBtnGetCamInfo.setOnClickListener(new View.OnClickListener() {
