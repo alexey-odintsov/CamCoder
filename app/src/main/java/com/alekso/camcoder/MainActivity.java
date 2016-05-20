@@ -24,8 +24,6 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private App mApp;
 
-    public final int CHUNK_SIZE = 3 * 60 * 1000; // 60 sec
-
     private static final String TAG = "CamCoder";
     private Camera mCamera;
     private TextureView mPreview;
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         switch (action) {
             case STOP:
                 mCaptureButton.setImageResource(R.drawable.stop);
-                mTimer = new CountDownTimer(CHUNK_SIZE, 1000) {
+                mTimer = new CountDownTimer(App.recordLength, 1000) {
 
                     private int c = 0;
 
@@ -247,12 +245,12 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             doRecord();
                         }
-                    }, 500);
+                    }, App.delayBetweenRecord);
 
                 }
             }
         });
-        mMediaRecorder.setMaxDuration(CHUNK_SIZE);
+        mMediaRecorder.setMaxDuration(App.recordLength);
 
         // Step 5: Prepare configured MediaRecorder
         try {
