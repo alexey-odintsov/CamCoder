@@ -169,6 +169,8 @@ public class MainActivity extends AppCompatActivity {
         mCamera = CameraHelper.getDefaultCameraInstance();
 
         Log.d(TAG, "found camera: " + mCamera);
+
+        if (mCamera == null) return false;
         // We need to make sure that our preview and recording video size are supported by the
         // camera. Query camera to find all the sizes and choose the optimal size given the
         // dimensions of our preview surface.

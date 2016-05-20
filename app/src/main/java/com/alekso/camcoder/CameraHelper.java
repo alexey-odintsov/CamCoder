@@ -241,6 +241,11 @@ public class CameraHelper {
             File f = new File(mediaStorageDir.getPath());
             // @todo check for empty directory
             List<String> files = Arrays.asList(f.list());
+
+            if (files == null || files.size() == 0) { // no files -> skip deleting
+                break;
+            }
+
             Collections.sort(files);
 
             for (String i : files) {

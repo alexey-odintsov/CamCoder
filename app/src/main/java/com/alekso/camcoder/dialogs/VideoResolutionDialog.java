@@ -55,6 +55,9 @@ public class VideoResolutionDialog extends AppCompatDialog {
 
         final List<String> resolutions = new ArrayList<>();
         Camera camera = CameraHelper.getDefaultCameraInstance();
+
+        if (camera == null) return;
+
         List<Camera.Size> sizes = camera.getParameters().getSupportedVideoSizes();
         camera.release();
         Collections.sort(sizes, new Comparator<Camera.Size>() {

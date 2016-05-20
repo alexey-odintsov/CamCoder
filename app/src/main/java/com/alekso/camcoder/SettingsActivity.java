@@ -131,6 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.show();
 
                 Camera camera = CameraHelper.getDefaultCameraInstance();
+                if (camera == null) return;
                 Camera.Parameters camParams = camera.getParameters();
                 camera.release();
 
