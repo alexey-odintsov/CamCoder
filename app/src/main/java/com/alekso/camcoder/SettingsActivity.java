@@ -15,12 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alekso.camcoder.dialogs.DirectoryChooserDialog;
 import com.alekso.camcoder.dialogs.VideoResolutionDialog;
+
+import java.io.File;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "Settings";
     private App mApp;
 
+    private Button mBtnSelectVideoPath;
     private Button mBtnSelectVideoResolution;
     private Button mBtnGetCamInfo;
     private Button mBtnChangeRecordLength;
@@ -35,6 +39,19 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         mApp = (App) getApplication();
+
+        mBtnSelectVideoPath = (Button) findViewById(R.id.btn_save_video_path_change);
+        mBtnSelectVideoPath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // File root = Environment.getExternalStorageDirectory(); // SD
+                // File root = Environment.getDataDirectory(); // /data
+                File root = new File("/"); //Environment.getRootDirectory();
+                DirectoryChooserDialog dialog = DirectoryChooserDialog.newInstance(root);
+                dialog.show(getSupportFragmentManager(), "SelectDirectoryDialog");
+
+            }
+        });
 
         mBtnSelectVideoResolution = (Button) findViewById(R.id.btn_video_resolution_change);
         mBtnSelectVideoResolution.setOnClickListener(new View.OnClickListener() {
