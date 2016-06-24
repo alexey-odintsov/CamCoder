@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -82,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ListView lv = ((AlertDialog) dialog).getListView();
-                        if (which == Dialog.BUTTON_POSITIVE) {
+                        if (which == Dialog.BUTTON_POSITIVE && lv.getCheckedItemPosition() != AdapterView.INVALID_POSITION) {
                             App.RECORD_LENGTH len = (App.RECORD_LENGTH) (lv.getItemAtPosition(lv.getCheckedItemPosition()));
                             App.recordLength = len.getDuration();
                             mTextViewRecordLength.setText(len.getName());
@@ -113,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ListView lv = ((AlertDialog) dialog).getListView();
-                        if (which == Dialog.BUTTON_POSITIVE) {
+                        if (which == Dialog.BUTTON_POSITIVE && lv.getCheckedItemPosition() != AdapterView.INVALID_POSITION) {
                             App.DELAY_BETWEEN_RECORD delay = (App.DELAY_BETWEEN_RECORD) (lv.getItemAtPosition(lv.getCheckedItemPosition()));
                             App.delayBetweenRecord = delay.getDelay();
                             mTextViewDelayBetweenRecord.setText(delay.getName());
