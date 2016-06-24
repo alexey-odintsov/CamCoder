@@ -204,21 +204,21 @@ public class CameraHelper {
         // Log.d("CAM", Environment.getExternalStoragePublicDirectory(Environment.MEDIA_MOUNTED).getAbsolutePath());
 
 
-        for (String dir : getExternalMounts()) {
-            Log.d("CAM", dir);
-            File f = new File(dir);
-
-            // @todo hardcoded - should be universal
-            if ("/storage/external_SD".equals(dir)) {
-                mediaStorageDir = f;
-            }
-        }
+//        for (String dir : getExternalMounts()) {
+//            Log.d("CAM", dir);
+//            File f = new File(dir);
+//
+//            // @todo hardcoded - should be universal
+//            if ("/storage/external_SD".equals(dir)) {
+//                mediaStorageDir = f;
+//            }
+//        }
 
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
-                Log.d("CameraSample", "failed to create directory");
+                Log.d(TAG, "failed to create directory");
                 return null;
             }
         }

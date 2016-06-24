@@ -37,10 +37,17 @@ public class DirectoryChooserDialog extends DialogFragment {
         void onDirectorySelect(String path);
     }
 
-    public static DirectoryChooserDialog newInstance(File root, OnDirectorySelectListener listener) {
+    /**
+     *
+     * @param path
+     * @param listener
+     * @return
+     */
+    public static DirectoryChooserDialog newInstance(String path, OnDirectorySelectListener listener) {
         DirectoryChooserDialog dialog = new DirectoryChooserDialog();
 
         Bundle args = new Bundle();
+        File root = new File(path);
         args.putString("root", root.getAbsolutePath());
         dialog.setArguments(args);
 

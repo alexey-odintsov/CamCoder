@@ -44,10 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         mBtnSelectVideoPath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // File root = Environment.getExternalStorageDirectory(); // SD
-                // File root = Environment.getDataDirectory(); // /data
-                File root = new File("/"); //Environment.getRootDirectory();
-                DirectoryChooserDialog dialog = DirectoryChooserDialog.newInstance(root, new DirectoryChooserDialog.OnDirectorySelectListener() {
+                DirectoryChooserDialog dialog = DirectoryChooserDialog.newInstance(App.saveVideoPath, new DirectoryChooserDialog.OnDirectorySelectListener() {
                     @Override
                     public void onDirectorySelect(String path) {
                         App.saveVideoPath = path;
