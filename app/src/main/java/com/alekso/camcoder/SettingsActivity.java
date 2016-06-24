@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
         mBtnSelectVideoResolution.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VideoResolutionDialog dialog = new VideoResolutionDialog(SettingsActivity.this);
+                VideoResolutionDialog dialog = VideoResolutionDialog.newInstance();
                 dialog.setVideoResolutionChangeListener(new VideoResolutionDialog.VideoResolutionChangeListener() {
                     @Override
                     public void onVideoResolutionSelected(String selectedValue) {
@@ -63,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
                         mTextViewVideoResolutionValue.setText(selectedValue);
                     }
                 });
-                dialog.show();
+                dialog.show(getFragmentManager(), "VideoResolutionDialog");
             }
         });
 
