@@ -31,13 +31,20 @@ public class DirectoryChooserDialog extends DialogFragment {
     private ArrayList<File> mItems = new ArrayList<>();
     private DirectoryAdapter adapter;
     private TextView tvParent;
+    private OnDirectorySelectListener listener;
 
-    public static DirectoryChooserDialog newInstance(File root) {
+    public interface OnDirectorySelectListener {
+        void onDirectorySelect(String path);
+    }
+
+    public static DirectoryChooserDialog newInstance(File root, OnDirectorySelectListener listener) {
         DirectoryChooserDialog dialog = new DirectoryChooserDialog();
 
         Bundle args = new Bundle();
         args.putString("root", root.getAbsolutePath());
         dialog.setArguments(args);
+
+        dialog.listener = listener;
 
         return dialog;
     }
@@ -76,6 +83,9 @@ public class DirectoryChooserDialog extends DialogFragment {
         btnSelect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getContext(), mRoot.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                if (listener != null) {
+                    listener.onDirectorySelect(mRoot.getAbsolutePath());
+                }
                 dismiss();
             }
         });

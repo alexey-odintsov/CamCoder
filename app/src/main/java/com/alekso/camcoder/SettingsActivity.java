@@ -47,7 +47,13 @@ public class SettingsActivity extends AppCompatActivity {
                 // File root = Environment.getExternalStorageDirectory(); // SD
                 // File root = Environment.getDataDirectory(); // /data
                 File root = new File("/"); //Environment.getRootDirectory();
-                DirectoryChooserDialog dialog = DirectoryChooserDialog.newInstance(root);
+                DirectoryChooserDialog dialog = DirectoryChooserDialog.newInstance(root, new DirectoryChooserDialog.OnDirectorySelectListener() {
+                    @Override
+                    public void onDirectorySelect(String path) {
+                        App.saveVideoPath = path;
+                        mTextViewVideoPathValue.setText(App.saveVideoPath);
+                    }
+                });
                 dialog.show(getSupportFragmentManager(), "SelectDirectoryDialog");
 
             }
