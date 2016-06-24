@@ -2,7 +2,10 @@ package com.alekso.camcoder;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.util.Log;
+
+import java.io.File;
 
 
 public class App extends Application {
@@ -85,7 +88,8 @@ public class App extends Application {
         }
     }
 
-    private static final String DEFAULT_SAVE_VIDEO_PATH = "/";
+    private static final String DEFAULT_SAVE_VIDEO_PATH = new File(Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_MOVIES), "CamCoder").getAbsolutePath();
     private static final String DEFAULT_VIDEO_RESOLUTION = "640x480";
     private static final int DEFAULT_RECORD_LENGTH = RECORD_LENGTH._3.getDuration();
     private static final int DEFAULT_DELAY_BETWEEN_RECORD = DELAY_BETWEEN_RECORD._200.getDelay();
