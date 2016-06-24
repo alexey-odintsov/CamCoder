@@ -8,12 +8,26 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/tvCameraParams"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Camera parameters" />
+            android:text="Reading camera parameters.." />
     </ScrollView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:id="@+id/btnClose"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

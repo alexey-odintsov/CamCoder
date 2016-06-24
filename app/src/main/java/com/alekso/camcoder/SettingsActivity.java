@@ -2,23 +2,18 @@ package com.alekso.camcoder;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.alekso.camcoder.dialogs.CameraInfoDialog;
 import com.alekso.camcoder.dialogs.DirectoryChooserDialog;
 import com.alekso.camcoder.dialogs.VideoResolutionDialog;
-
-import java.io.File;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "Settings";
@@ -145,40 +140,8 @@ public class SettingsActivity extends AppCompatActivity {
         mBtnGetCamInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(v.getContext());
-                dialogBuilder.setTitle("Camera information");
-                dialogBuilder.setView(getLayoutInflater().inflate(R.layout.camera_info, null));
-                final AlertDialog dialog = dialogBuilder.create();
-                dialog.show();
-
-                Camera camera = CameraHelper.getDefaultCameraInstance();
-                if (camera == null) return;
-                Camera.Parameters camParams = camera.getParameters();
-                camera.release();
-
-                final TextView mCameraParameters = (TextView) dialog.findViewById(R.id.tvCameraParams);
-                if (camParams != null) {
-                    String paramsString = camParams.flatten();
-                    if (paramsString != null && !paramsString.isEmpty()) {
-                        String[] params = paramsString.split(";");
-
-                        StringBuilder sb = new StringBuilder("<b>Params:</b><br>");
-                        for (String param : params) {
-                            if (param != null) {
-                                String[] paramKV = param.split("=");
-                                sb.append("<b>").append(paramKV[0]).append("</b><br>");
-                                if (paramKV.length > 1 && paramKV[1] != null) {
-                                    String[] paramsValues = paramKV[1].split(",");
-                                    for (String value : paramsValues) {
-                                        sb.append(" - ").append(value).append("<br>");
-                                    }
-                                }
-                            }
-                        }
-
-                        mCameraParameters.setText(Html.fromHtml(sb.toString()));
-                    }
-                }
+                CameraInfoDialog dialog = CameraInfoDialog.newInstance();
+                dialog.show(getFragmentManager(), "CameraInfoDialog");
             }
         });
 
