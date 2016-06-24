@@ -2,6 +2,7 @@ package com.alekso.camcoder.dialogs;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatDialog;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.alekso.camcoder.App;
 import com.alekso.camcoder.CameraHelper;
 import com.alekso.camcoder.R;
 
@@ -25,17 +25,15 @@ public class VideoResolutionDialog extends AppCompatDialog {
     private static final String TAG = "VideoResolutionDialog";
     private Button mButtonCancel;
     private ListView mListView;
-    private String selectedValue;
-    private VideoResolutionChangeListener veVideoResolutionChangeListener;
+    private VideoResolutionChangeListener listener;
 
     public void setVideoResolutionChangeListener(VideoResolutionChangeListener veVideoResolutionChangeListener) {
-        this.veVideoResolutionChangeListener = veVideoResolutionChangeListener;
+        this.listener = veVideoResolutionChangeListener;
     }
 
     public interface VideoResolutionChangeListener {
         void onVideoResolutionSelected(String selectedValue);
     }
-
 
     public VideoResolutionDialog(Context context) {
         super(context);
@@ -53,40 +51,51 @@ public class VideoResolutionDialog extends AppCompatDialog {
             }
         });
 
-        final List<String> resolutions = new ArrayList<>();
-        Camera camera = CameraHelper.getDefaultCameraInstance();
+        GetCameraSizes getCameraSizesTask = new GetCameraSizes();
+        getCameraSizesTask.execute();
+    }
 
-        if (camera == null) return;
+    class GetCameraSizes extends AsyncTask<Void, Void, List<Camera.Size>> {
 
-        List<Camera.Size> sizes = camera.getParameters().getSupportedVideoSizes();
-        camera.release();
-        Collections.sort(sizes, new Comparator<Camera.Size>() {
-            @Override
-            public int compare(Camera.Size a, Camera.Size b) {
-                if (a.width > b.width) {
-                    return -1;
-                } else if (a.height > b.height) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
-        for (Camera.Size size : sizes) {
-            resolutions.add(String.format("%dx%d", size.width, size.height));
-            Log.d(TAG, String.format("%dx%d", size.width, size.height));
+        @Override
+        protected List<Camera.Size> doInBackground(Void... params) {
+            Camera camera = CameraHelper.getDefaultCameraInstance();
+
+            if (camera == null) return null;
+
+            List<Camera.Size> sizes = camera.getParameters().getSupportedVideoSizes();
+            camera.release();
+            return sizes;
         }
-        mListView.setAdapter(new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_list_item_1,
-                resolutions));
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedValue = resolutions.get(position);
-                ((App) getContext().getApplicationContext()).videoResolution = selectedValue;
-                Log.d(TAG, "Resolution selected: " + selectedValue);
-                veVideoResolutionChangeListener.onVideoResolutionSelected(selectedValue);
-                dismiss();
+
+        @Override
+        protected void onPostExecute(List<Camera.Size> sizes) {
+            final List<String> resolutions = new ArrayList<>();
+            Collections.sort(sizes, new Comparator<Camera.Size>() {
+                @Override
+                public int compare(Camera.Size a, Camera.Size b) {
+                    if (a.width > b.width) {
+                        return -1;
+                    } else if (a.height > b.height) {
+                        return 1;
+                    }
+                    return 0;
+                }
+            });
+            for (Camera.Size size : sizes) {
+                resolutions.add(String.format("%dx%d", size.width, size.height));
+                Log.d(TAG, String.format("%dx%d", size.width, size.height));
             }
-        });
+            mListView.setAdapter(new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_list_item_1,
+                    resolutions));
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    listener.onVideoResolutionSelected(resolutions.get(position));
+                    dismiss();
+                }
+            });
+        }
     }
 }

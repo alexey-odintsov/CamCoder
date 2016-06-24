@@ -64,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.setVideoResolutionChangeListener(new VideoResolutionDialog.VideoResolutionChangeListener() {
                     @Override
                     public void onVideoResolutionSelected(String selectedValue) {
+                        App.videoResolution = selectedValue;
                         mTextViewVideoResolutionValue.setText(selectedValue);
                     }
                 });
