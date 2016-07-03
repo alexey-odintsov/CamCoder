@@ -240,7 +240,14 @@ public class CameraHelper {
             deleteCount++;
             File f = new File(mediaStorageDir.getPath());
             // @todo check for empty directory
-            List<String> files = Arrays.asList(f.list());
+            List<String> files = new ArrayList<>();
+
+            // retrieve only own files
+            for (String subItem: f.list()) {
+                if (subItem.startsWith(App.FILE_PREFIX)) {
+                    files.add(subItem);
+                }
+            }
 
             if (files == null || files.size() == 0) { // no files -> skip deleting
                 break;
@@ -251,7 +258,6 @@ public class CameraHelper {
             for (String i : files) {
                 Log.d("FILE", "- " + i);
             }
-            // TODO: 24/06/16 Delete only own files
             File fileToDelete = new File(mediaStorageDir.getPath(), files.get(0));
             boolean isDeleted = fileToDelete.delete();
             Log.d(TAG, "deleting " + fileToDelete.toString() + ": " + isDeleted);
