@@ -251,6 +251,7 @@ public class CameraHelper {
             for (String i : files) {
                 Log.d("FILE", "- " + i);
             }
+            // TODO: 24/06/16 Delete only own files
             File fileToDelete = new File(mediaStorageDir.getPath(), files.get(0));
             boolean isDeleted = fileToDelete.delete();
             Log.d(TAG, "deleting " + fileToDelete.toString() + ": " + isDeleted);
@@ -262,10 +263,10 @@ public class CameraHelper {
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
+                    App.FILE_PREFIX + "_" + timeStamp + ".jpg");
         } else if (type == MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_" + timeStamp + ".mp4");
+                    App.FILE_PREFIX + "_" + timeStamp + ".mp4");
         } else {
             return null;
         }

@@ -12,6 +12,8 @@ public class App extends Application {
     private static final String TAG = "App";
     /*package*/ static final String PREFS_NAME = "cam_coder_settings";
 
+    static final String FILE_PREFIX = "CAMCODER";
+
     public enum RECORD_LENGTH {
         _1(60 * 1000, "1m"),
         _2(2 * 60 * 1000, "2m"),
