@@ -114,7 +114,14 @@ public class MainActivity extends AppCompatActivity {
         // BEGIN_INCLUDE(stop_release_media_recorder)
         // stop recording and release camera
         if (mMediaRecorder != null) {
-            mMediaRecorder.stop();  // stop the recording
+            try {
+                mMediaRecorder.stop();  // stop the recording
+            } catch (RuntimeException e) {
+                // no valid audio/video data has been received when stop() is called. This happens
+                // if stop() is called immediately after start(). The failure lets the application
+                // take action accordingly to clean up the output file (delete the output file, for
+                // instance), since the output file is not properly constructed when this happens.
+            }
         }
         releaseMediaRecorder(); // release the MediaRecorder object
         if (mCamera != null) {
