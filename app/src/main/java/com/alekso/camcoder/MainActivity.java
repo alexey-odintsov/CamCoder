@@ -7,6 +7,7 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -18,8 +19,6 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private App mApp;
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (isRecording) {
-                    doStopRecord();
+                    doStopRecord(false);
                 } else {
                     doRecord();
                 }
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        doStopRecord();
+        doStopRecord(false);
 
     }
 
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         // END_INCLUDE(prepare_start_media_recorder)
     }
 
-    private void doStopRecord() {
+    private void doStopRecord(boolean doRepeat) {
         if (mTimer != null) {
             mTimer.cancel();
         }
@@ -133,6 +132,16 @@ public class MainActivity extends AppCompatActivity {
         isRecording = false;
         releaseCamera();
         // END_INCLUDE(stop_release_media_recorder)
+
+        if (doRepeat) {
+            Handler mHandler = new Handler();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doRecord();
+                }
+            }, App.delayBetweenRecord);
+        }
     }
 
     enum ACTION {
@@ -250,15 +259,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, "Max duration reached");
                 } else if (what == 1000 /*MediaRecorder.MEDIA_RECORDER_TRACK_INFO_COMPLETION_STATUS*/) {
                     Log.d(TAG, "Restart video recording");
-                    doStopRecord();
-
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            doRecord();
-                        }
-                    }, App.delayBetweenRecord);
-
+                    doStopRecord(true);
                 }
             }
         });
