@@ -87,6 +87,8 @@ public class VideoResolutionDialog extends DialogFragment {
 
         @Override
         protected void onPostExecute(List<Camera.Size> sizes) {
+            if (sizes == null) return;
+
             final List<String> resolutions = new ArrayList<>();
             Collections.sort(sizes, new Comparator<Camera.Size>() {
                 @Override
