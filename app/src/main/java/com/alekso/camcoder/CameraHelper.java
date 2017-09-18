@@ -39,6 +39,7 @@ public class CameraHelper {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     private static final String TAG = "CameraHelper";
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
 
     /**
      * Iterate over supported camera preview sizes to see which one best fits the
@@ -195,8 +196,8 @@ public class CameraHelper {
 
 
         File mediaStorageDir = new File(App.saveVideoPath);
-                //= new File(Environment.getExternalStoragePublicDirectory(
-                //Environment.DIRECTORY_PICTURES), "CameraSample");
+        //= new File(Environment.getExternalStoragePublicDirectory(
+        //Environment.DIRECTORY_PICTURES), "CameraSample");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -243,7 +244,7 @@ public class CameraHelper {
             List<String> files = new ArrayList<>();
 
             // retrieve only own files
-            for (String subItem: f.list()) {
+            for (String subItem : f.list()) {
                 if (subItem.startsWith(App.FILE_PREFIX)) {
                     files.add(subItem);
                 }
@@ -265,7 +266,7 @@ public class CameraHelper {
         }
 
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String timeStamp = DATE_FORMAT.format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
